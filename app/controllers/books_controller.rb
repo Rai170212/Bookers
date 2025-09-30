@@ -1,33 +1,33 @@
 class BooksController < ApplicationController
 
-  # 投稿一覧画面 (アプリケーショントップ画面)
+  # 一覧画面
   def index
-    # IDの若い順に一覧表示
-    @books = Book.all.order(id: :asc) 
-    # 新規投稿フォーム用のインスタンス
-    @book = Book.new 
+    # すべての投稿を取得
+    @books = Book.all
+    # 新規投稿用の空のインスタンスを作成
+    @book = Book.new
   end
 
-  # 投稿詳細画面
+  # 詳細画面
   def show
     @book = Book.find(params[:id])
   end
 
-  # 新規投稿処理
+  # 新規作成処理
   def create
     @book = Book.new(book_params)
     if @book.save
-      # 処理成功: サクセスメッセージを設定し、詳細画面へリダイレクト
-      flash[:notice] = "Book was successfully created." 
-      redirect_to book_path(@book)
+      # 保存が成功した場合、詳細画面へリダイレクトし、成功メッセージを表示
+      redirect_to book_path(@book), notice: 'Book was successfully created.'
     else
-      # 処理失敗: エラーメッセージを表示するため、indexを再描画
-      @books = Book.all.order(id: :asc) 
-      render :index, status: :unprocessable_entity 
+      # 保存が失敗した場合、一覧画面を再描画
+      # @books を再度設定しないと、一覧が表示されなくなる
+      @books = Book.all
+      render :index
     end
   end
 
-  # 投稿編集画面
+  # 編集画面
   def edit
     @book = Book.find(params[:id])
   end
@@ -36,12 +36,11 @@ class BooksController < ApplicationController
   def update
     @book = Book.find(params[:id])
     if @book.update(book_params)
-      # 処理成功: サクセスメッセージを設定し、詳細画面へリダイレクト
-      flash[:notice] = "Book was successfully updated."
-      redirect_to book_path(@book)
+      # 更新が成功した場合、詳細画面へリダイレクトし、成功メッセージを表示
+      redirect_to book_path(@book), notice: 'Book was successfully updated.'
     else
-      # 処理失敗: エラーメッセージを表示するため、editを再描画
-      render :edit, status: :unprocessable_entity
+      # 更新が失敗した場合、編集画面を再描画
+      render :edit
     end
   end
 
@@ -49,14 +48,13 @@ class BooksController < ApplicationController
   def destroy
     book = Book.find(params[:id])
     book.destroy
-    # 処理成功: サクセスメッセージを設定し、一覧画面へリダイレクト
-    flash[:notice] = "Book was successfully destroyed."
-    redirect_to books_path, status: :see_other
+    # 削除後、一覧画面へリダイレクトし、成功メッセージを表示
+    redirect_to books_path, notice: 'Book was successfully destroyed.'
   end
 
   private
-    # ストロングパラメータ
-    def book_params
-      params.require(:book).permit(:title, :body)
-    end
+  # ストロングパラメータ：セキュリティのため、許可されたパラメータのみを受け取る
+  def book_params
+    params.require(:book).permit(:title, :body)
+  end
 end

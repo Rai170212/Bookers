@@ -6,16 +6,24 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# application.cssがcustom.cssを自動的に読み込みます %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p> 
+    <div class="container">
+      <% if flash[:notice] %>
+        <div class="flash notice"><%= flash[:notice] %></div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="flash alert"><%= flash[:alert] %></div>
+      <% end %>
+    </div>
 
-  <div class="container">
-    <%= yield %>
-  </div>
-  
-</body>
+
+    <main class="container">
+      <%= yield %>
+    </main>
+  </body>
 </html>
