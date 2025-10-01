@@ -32,24 +32,61 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Table Styles */
-table {
-  border-collapse: collapse;
+/* ================================================= */
+/* 🌟 Table Styles (Flexboxで再現) 🌟 */
+/* ================================================= */
+
+/* 見出し行とデータ行に共通のFlexbox設定 */
+.book-header,
+.book-row {
+  /* <table>と<tr>の代わり */
+  display: flex;
+  align-items: center;
   width: 100%;
-  margin-bottom: 1rem;
-}
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #dee2e6;
-}
-th {
-  background-color: #e9ecef;
-  font-weight: bold;
+  border-bottom: 1px solid #dee2e6; /* 行の区切り線 */
+  padding: 12px; /* th, td に合わせてパディングを設定 */
 }
 
-/* Form Styles */
+/* 見出し行の装飾 (th の代わり) */
+.book-header {
+  /* <thead>と<th>の代わり */
+  background-color: #e9ecef;
+  font-weight: bold;
+  list-style: none; /* ul/li で作成した場合の点を消す */
+  margin: 0;
+  padding-left: 12px;
+}
+.book-header li {
+  padding: 0;
+}
+
+/* 各列の幅とレイアウト */
+/* Flexの比率で幅を決定 (例: Title 2 / Body 4 / Actions 固定幅) */
+.header-title,
+.row-title {
+  flex: 2;
+  padding-right: 12px;
+}
+.header-body,
+.row-body {
+  flex: 4;
+  padding-right: 12px;
+}
+
+/* アクション列は固定幅で、リンクを右寄せ */
+.header-actions,
+.row-actions {
+  width: 220px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* アクションリンク間の調整 */
+.row-actions a {
+  margin-left: 15px; /* リンク間のスペース */
+}
+
+/* フォームのスタイルは変更なし */
 .field,
 .actions {
   margin-bottom: 15px;
@@ -65,7 +102,7 @@ textarea {
   padding: 10px;
   border: 1px solid #ced4da;
   border-radius: 4px;
-  box-sizing: border-box; /* Ensures padding doesn't affect width */
+  box-sizing: border-box;
 }
 input[type='submit'] {
   display: inline-block;
